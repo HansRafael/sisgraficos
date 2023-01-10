@@ -32,3 +32,41 @@ class handDetector():
                 if draw:
                     self.mpDraw.draw_landmarks(img, handLms,self.mpHands.HAND_CONNECTIONS)
         return img
+
+    def findPositionFingers(self, img, draw=True):
+        xPositionList = []
+        yPositionList = []
+        bbox = []
+        self.fingersList = []
+        if self.results.multi_hand_landmarks:
+            myHand = self.results.multi_hand_landmarks[0] 
+        
+            for id, fingerPosition in enumerate(myHand.landmark):
+                hightImage, widthImage, controll = img.shape
+                
+                xScreen = int(fingerPosition.x * widthImage)
+                yScreen = int(fingerPosition.y * hightImage)
+                xPositionList.append(xScreen)
+                yPositionList.append(yScreen)
+
+                self.fingersList.append([id, xScreen,yScreen])
+                if draw:
+                    cv2.circle(img, (xScreen, yScreen), 5, (255, 0, 255), cv2.FILLED)
+
+            xmin, xmax = min(xPositionList), max(xPositionList)
+            ymin, ymax = min(yPositionList), max(yPositionList)
+            bbox = xmin, ymin, xmax, ymax
+
+            if draw:
+                cv2.rectangle(img, (bbox[0] - 20, bbox[1] - 20),
+                    (bbox[2] + 20, bbox[3] + 20), (0, 255, 0), 2)
+
+        return self.fingersList
+
+    def getDistance(self, indexFingerTip, middleFingerTip):
+        xIndex, yIndex = indexFingerTip[1], indexFingerTip[2]
+        xMiddle, yMiddle = middleFingerTip[1], middleFingerTip[2]
+        
+        return(math.dist([xIndex,yIndex], [xMiddle, yMiddle]))
+
+
