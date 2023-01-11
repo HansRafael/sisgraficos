@@ -15,8 +15,7 @@ capCam.set(3, WIDTH_CAM)
 capCam.set(4, HIGHT_CAM)
 
 """Setting hand recognition based on Mediapipe from Google"""
-
-getGestureMovemnt = ht.handDetector(detectionCon=0.6)
+handTracking = ht.handDetector(detectionCon=0.6)
 
 while True:
     (success, img) = capCam.read()
@@ -27,19 +26,22 @@ while True:
         # If loading a video, use 'break' instead of 'continue'.
         continue
     
-    img = getGestureMovemnt.findHands(img, draw=True)
-    imgList = getGestureMovemnt.findPositionFingers(img, draw=False)
+    img = handTracking.findHands(img, draw=True)
+    imgList = handTracking.findPositionFingers(img, draw=False)
    
 
     if(len(imgList) != 0):
         x, y = imgList[8][1], imgList[8][2]
         #controlMovenmt.mouseMovement(x, y)
         print(f'distance between:\nindexTip{imgList[8]}\nmiddleTip{imgList[12]}')
-        distanceIndexAndMiddleFinger = int(getGestureMovemnt.getDistance(imgList[8], imgList[12]))
+        
+        distanceIndexAndMiddleFinger = int(handTracking.getDistance(imgList[8], imgList[12]))
         if(distanceIndexAndMiddleFinger <= 100):
             print('dedinhos juntos')
         if(distanceIndexAndMiddleFinger > 100):
             print('ta separado')
+    
+    
     #cv2.imshow("Gesture Recognition", img)
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break

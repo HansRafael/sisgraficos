@@ -42,7 +42,7 @@ class handDetector():
             myHand = self.results.multi_hand_landmarks[0] 
         
             for id, fingerPosition in enumerate(myHand.landmark):
-                hightImage, widthImage, controll = img.shape
+                hightImage, widthImage, _ = img.shape
                 
                 xScreen = int(fingerPosition.x * widthImage)
                 yScreen = int(fingerPosition.y * hightImage)
