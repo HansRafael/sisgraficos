@@ -17,7 +17,7 @@ class handDetector():
         self.modelComplex = modelComplexity
         self.detectionCon = detectionCon
         self.trackCon = trackCon
-
+        
         self.mpHands = mp.solutions.hands
         self.hands = self.mpHands.Hands(self.mode, self.maxHands, self.modelComplex, 
                                         self.detectionCon, self.trackCon)
@@ -38,7 +38,7 @@ class handDetector():
         xPositionList = []
         yPositionList = []
         bbox = []
-        self.fingersList = []
+        self.lmList = []
         if self.results.multi_hand_landmarks:
             myHand = self.results.multi_hand_landmarks[0] 
         
@@ -47,22 +47,37 @@ class handDetector():
                 
                 xScreen = int(fingerPosition.x * widthImage)
                 yScreen = int(fingerPosition.y * hightImage)
+                
                 xPositionList.append(xScreen)
                 yPositionList.append(yScreen)
 
-                self.fingersList.append([id, xScreen,yScreen])
-                if draw:
-                    cv2.circle(img, (xScreen, yScreen), 5, (255, 0, 255), cv2.FILLED)
+                xmin, xmax = min(xPositionList), max(xPositionList)
+                ymin, ymax = min(yPositionList), max(yPositionList)
+                bbox = xmin, ymin, xmax, ymax
+        
 
-            xmin, xmax = min(xPositionList), max(xPositionList)
-            ymin, ymax = min(yPositionList), max(yPositionList)
-            bbox = xmin, ymin, xmax, ymax
-
+                self.lmList.append([id, xScreen,yScreen])
             if draw:
-                cv2.rectangle(img, (bbox[0] - 20, bbox[1] - 20),
-                    (bbox[2] + 20, bbox[3] + 20), (0, 255, 0), 2)
+                cv2.rectangle(img, (bbox[0] - 15, bbox[1] - 15), (bbox[2] + 15, bbox[3] + 15), (0, 255, 0), 2)
+        return self.lmList, bbox
 
-        return self.fingersList
+    def fingersUp(self):
+        fingers = []
+        # Thumb
+        if self.lmList[self.tipIds[0]][1] > self.lmList[self.tipIds[0] - 1][1]:
+            fingers.append(1)
+        else:
+            fingers.append(0)
+        # 4 Fingers
+        for id in range(1, 5):
+            if self.lmList[self.tipIds[id]][2] < self.lmList[self.tipIds[id] - 2][2]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        return fingers
+
+    def getAreaBox(self, boxArea):
+        return (boxArea[2] - boxArea[0]) * (boxArea[3] - boxArea[1]) // 100
 
     def getDistance(self, indexFingerTip, middleFingerTip):
         xIndex, yIndex = indexFingerTip[1], indexFingerTip[2]
