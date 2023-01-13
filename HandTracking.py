@@ -1,10 +1,3 @@
-"""
-Hand Tracking Module
-By: Murtaza Hassan
-Youtube: http://www.youtube.com/c/MurtazasWorkshopRoboticsandAI
-Website: https://www.computervision.zone
-"""
-
 import cv2
 import mediapipe as mp
 import time
@@ -82,7 +75,7 @@ class handDetector():
     def getDistance(self, indexFingerTip, middleFingerTip):
         xIndex, yIndex = indexFingerTip[1], indexFingerTip[2]
         xMiddle, yMiddle = middleFingerTip[1], middleFingerTip[2]
-        
+        #print(cv2.norm(indexFingerTip,middleFingerTip, cv2.NORM_L2))
         return(math.dist([xIndex,yIndex], [xMiddle, yMiddle]))
 
 

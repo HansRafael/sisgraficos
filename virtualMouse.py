@@ -51,11 +51,11 @@ while True:
             
             if(fingerUp == TWO_FINGERS or fingerUp == TWO_FINGERSs):
                 x, y = imgList[FINGER][1], imgList[FINGER][2]
-                controlMovement.mouseMovement(x, y)
+                controlMovement.mousemove(x,y)
                 if(fingerUp[0] == 1):
-                    controlMovement.clickMovemnt(x,y)
+                    controlMovement.mouseclick(x,y)
 
-
+            distanceIndexAndMiddleFinger = handTracking.getDistance(imgList[FINGER], imgList[8])
             #print(f'distance between indexTip and middleTip: {distanceIndexAndMiddleFinger}')
 
         else:
