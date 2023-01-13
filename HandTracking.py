@@ -72,6 +72,11 @@ class handDetector():
     def getAreaBox(self, boxArea):
         return (boxArea[2] - boxArea[0]) * (boxArea[3] - boxArea[1]) // 100
 
+    def getCenterRectancle(self, boxArea):
+        xCenter = (boxArea[0] + boxArea[2]) / 2
+        yCenter = (boxArea[1] + boxArea[3]) / 2
+        return xCenter, yCenter
+
     def getDistance(self, indexFingerTip, middleFingerTip):
         xIndex, yIndex = indexFingerTip[1], indexFingerTip[2]
         xMiddle, yMiddle = middleFingerTip[1], middleFingerTip[2]
