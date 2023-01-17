@@ -1,5 +1,8 @@
 import pyautogui as pygui
-import sys
+import Quartz
+import LaunchServices
+from Cocoa import NSURL
+import Quartz.CoreGraphics as CG
 from Quartz.CoreGraphics import CGEventCreateMouseEvent
 from Quartz.CoreGraphics import CGEventPost
 from Quartz.CoreGraphics import kCGEventMouseMoved
@@ -37,3 +40,25 @@ class gestureControll():
         #mouseEvent(kCGEventMouseMoved, posx,posy);
         self.mouseEvent(kCGEventLeftMouseDown, posx,posy)
         self.mouseEvent(kCGEventLeftMouseUp, posx,posy)
+
+    def takeScreenshot(self, path):
+        dpi = 72
+        region = CG.CGRectInfinite
+
+        image = CG.CGWindowListCreateImage(
+            region,
+            CG.kCGWindowListOptionOnScreenOnly,
+            CG.kCGNullWindowID,
+            CG.kCGWindowImageDefault)
+
+        url = NSURL.fileURLWithPath_(path)
+        dest = Quartz.CGImageDestinationCreateWithURL(
+            url,
+            LaunchServices.kUTTypePNG, 1, None
+            )
+        prop = {
+            Quartz.kCGImagePropertyDPIWidth: dpi,
+            Quartz.kCGImagePropertyDPIHeight: dpi,
+            }
+        Quartz.CGImageDestinationAddImage(dest, image, prop)
+        Quartz.CGImageDestinationFinalize(dest)
