@@ -1,9 +1,7 @@
 import cv2
 import mediapipe as mp
-import time
-import math
 
-class handDetector():
+class HandDetector():
     def __init__(self, mode=False, maxHands=1, modelComplexity=1, detectionCon=0.5, trackCon=0.5):
         self.mode = mode
         self.maxHands = maxHands
@@ -19,6 +17,7 @@ class handDetector():
 
     def findHands(self, img, draw=True):
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        #COLOR_BGR2RGB returns image in RGB format, which was initially in BGR format as read by cv2. imread()
         self.results = self.hands.process(imgRGB)
 
         if self.results.multi_hand_landmarks:
@@ -68,19 +67,5 @@ class handDetector():
             else:
                 fingers.append(0)
         return fingers
-
-    def getAreaBox(self, boxArea):
-        return (boxArea[2] - boxArea[0]) * (boxArea[3] - boxArea[1]) // 100
-
-    def getCenterRectancle(self, boxArea):
-        xCenter = (boxArea[0] + boxArea[2]) / 2
-        yCenter = (boxArea[1] + boxArea[3]) / 2
-        return xCenter, yCenter
-
-    def getDistance(self, indexFingerTip, middleFingerTip):
-        xIndex, yIndex = indexFingerTip[1], indexFingerTip[2]
-        xMiddle, yMiddle = middleFingerTip[1], middleFingerTip[2]
-        #print(cv2.norm(indexFingerTip,middleFingerTip, cv2.NORM_L2))
-        return(math.dist([xIndex,yIndex], [xMiddle, yMiddle]))
 
 

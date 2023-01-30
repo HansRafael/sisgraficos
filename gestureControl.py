@@ -12,7 +12,7 @@ from Quartz.CoreGraphics import kCGMouseButtonLeft
 from Quartz.CoreGraphics import kCGHIDEventTap
 from Quartz.CoreGraphics import CGEventCreateScrollWheelEvent
 
-class gestureControll():
+class GestureControl():
     def __init__(self) -> None:
         self.sizeScreen = pygui.size()
 
@@ -24,24 +24,21 @@ class gestureControll():
                     kCGMouseButtonLeft)
         CGEventPost(kCGHIDEventTap, theEvent)
 
-    def mousemove(self, posx,posy):
+    def mouse_move(self, posx,posy):
         self.mouseEvent(kCGEventMouseMoved, posx,posy)
 
-    def scrollWheel(self, num_times, upOrDown):
+    def scroll_wheel(self, num_times, upOrDown):
         for i in range(1, num_times):
             multiplier = 1 - (float(i) / num_times)
             speed = (4 * multiplier) * upOrDown
             event = CGEventCreateScrollWheelEvent(None, 0, 1, speed)
             CGEventPost(kCGHIDEventTap, event)
 
-    def mouseclick(self,posx,posy):
-        # uncomment this line if you want to force the mouse 
-        # to MOVE to the click location first (I found it was not necessary).
-        #mouseEvent(kCGEventMouseMoved, posx,posy);
+    def mouse_click(self,posx,posy):
         self.mouseEvent(kCGEventLeftMouseDown, posx,posy)
         self.mouseEvent(kCGEventLeftMouseUp, posx,posy)
 
-    def takeScreenshot(self, path):
+    def take_screenshot(self, path):
         dpi = 72
         region = CG.CGRectInfinite
 
