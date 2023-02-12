@@ -17,7 +17,7 @@ class HandDetector():
 
     def findHands(self, img, draw=True):
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        #COLOR_BGR2RGB returns image in RGB format, which was initially in BGR format as read by cv2. imread()
+        #COLOR_BGR2RGB returns image in RGB format, which was initially in BGR format as read by cv2.imread()
         self.results = self.hands.process(imgRGB)
 
         if self.results.multi_hand_landmarks:

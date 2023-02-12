@@ -1,5 +1,16 @@
-
+import os
 import math
+
+def create_path():
+    currentPath = os.getcwd()
+    screenshotPath = f'{currentPath}/screenshots/'
+    if(os.path.exists(screenshotPath)):
+        return f'{currentPath}/screenshots/'
+    else:
+        path = os.path.join(currentPath, 'screenshots/')
+        os.mkdir(path)
+        return path
+
 
 def get_area_box(boxArea) -> float:
     return (boxArea[2] - boxArea[0]) * (boxArea[3] - boxArea[1]) // 100
